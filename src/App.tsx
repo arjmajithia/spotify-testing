@@ -1,14 +1,29 @@
-import React from 'react';
+import * as React from 'react';
+import { BrowserRouter, Route, Switch, Link  } from 'react-router-dom';
 import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
+import Homepage from './pages/Homepage/Homepage';
+import Search from './pages/Search/Search';
+import * as RouteConstants from './constants/RouteConstants';
+import { Counter } from './components/counter/Counter';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
+	  <BrowserRouter>
         <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
+		<nav>
+		<ul>
+			<li><Link to={RouteConstants.NEW}>Counter</Link></li>
+			<li><Link to={RouteConstants.SINGLES}>Search</Link></li>
+		</ul>	
+		</nav>	
+		<Homepage />
+		<Switch>
+		<Route path={RouteConstants.NEW}><Counter /></Route>
+		<Route path={RouteConstants.SINGLES}><Search /></Route>
+		</Switch>
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
@@ -50,6 +65,7 @@ function App() {
             React Redux
           </a>
         </span>
+		</BrowserRouter>
       </header>
     </div>
   );
