@@ -8,7 +8,7 @@ export const NEW = "/new";
 export const GENRES = "/genres";
 
 export const ALBUM = "/album";
-export const PLAYLIST = "/playlist";
+export const FEATURED = "/featured";
 export const ARTIST = "/artist";
 export const ALBUMS = "/albums";
 export const SINGLES = "/singles";

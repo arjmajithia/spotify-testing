@@ -1,5 +1,6 @@
 import React from 'react';
 import ReacDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
 import App from './App';
@@ -11,9 +12,11 @@ const container = document.getElementById('root')!;
 
 ReacDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
+   <BrowserRouter>
+     <Provider store={store}>
         <App />
-    </Provider>
+     </Provider>
+	</BrowserRouter>
   </React.StrictMode>
 , container);
 

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from '../../app/store';
 import { setLoggedIn } from '../authorization/authorizationSlice';
 
+/** need all the variables that fetch returns, initialize to nothing */
 interface userInfoState {
 	displayName: string,
 	type: string,
@@ -35,28 +36,32 @@ export const userInfoSlice = createSlice({
 	},
 });
 
+/** want to be able to return slice actions and data */
 export const { setDisplayName, setType, setFollowers, setUri } = userInfoSlice.actions;
-
 export const selectDisplayName = (state: RootState) => state.userinfo.displayName;
 export const selectType = (state: RootState) => state.userinfo.type;
 export const selectUri = (state: RootState) => state.userinfo.uri;
 export const selectFollowers = (state: RootState) => state.userinfo.followers;
 
-export const setUserProfileAsync = (accessToken: string): AppThunk => dispatch => {
+/** want authorization token, search query, and filters to pass into api query  */
+export const checkProfileAsync  = (accessToken: string): AppThunk => dispatch => {
+	/** add access token and query search with GET  */
 	const myHeaders = new Headers();
-	myHeaders.append('Authorization', 'Bearer '+ accessToken);
+	myHeaders.append('Authorization', 'Bearer '+ accessToken['access_token']);
 
 	fetch('https://api.spotify.com/v1/me', {
 		method: 'GET',
 		headers: myHeaders,
 	}).then(response => response.json()).then((data) => {
 		console.log(data); 
+		/** add returned data to state  */
 		dispatch(setDisplayName(data.display_name ? data.display_name : data.id)); 
 		dispatch(setType(data.type ? data.type : data.id)); 
 		dispatch(setUri(data.uri ? data.uri : data.id)); 
 		dispatch(setFollowers(data.followers ? data.followers : data.id)); 
 	}).catch((error) => {
 		console.log(error); 
+		/** 401 is bad token, reauthorization needed  */
 		if (error instanceof XMLHttpRequest) { if (error.status === 401) { dispatch(setLoggedIn(false)); } }
 	});
 };

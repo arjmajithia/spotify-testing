@@ -3,6 +3,8 @@ import counterReducer from '../components/counter/counterSlice';
 import authorizationReducer from '../components/authorization/authorizationSlice';
 import userInfoReducer from '../components/userinfo/userInfoSlice';
 import searcherReducer from '../components/search/searcherSlice';
+import featplaylistReducer from '../components/featured/featplaylistSlice';
+import newreleasesReducer from '../components/newreleases/newreleasesSlice';
 import { useDispatch } from 'react-redux';
 
 export const store = configureStore({
@@ -11,6 +13,8 @@ export const store = configureStore({
 	authorization: authorizationReducer,
 	userinfo: userInfoReducer,
 	searcher: searcherReducer,
+    featured: featplaylistReducer,	
+	newrelease: newreleasesReducer,	
   },
 });
 

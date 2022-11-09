@@ -7,7 +7,6 @@ export default function Homepage() {
 	<div>
 	<h1>Homepage</h1>
 	  <Authorization />
-	  <UserInfo />
 	</div>
 	);
 }

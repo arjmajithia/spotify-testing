@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectTracks, selectArtists, selectAlbums, selectPlaylists, setSearchAsync } from './searcherSlice';
-import styles from './Searcher.module.css';
+import { selectTracks, selectArtists, selectAlbums, selectPlaylists, setSearchAsync } from './categoriesSlice';
+import styles from './Categories.module.css';
 import { AppDispatch } from '../../app/store';
 import { selectAccessToken } from '../authorization/authorizationSlice';
 
@@ -13,7 +13,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { TextField } from '@material-ui/core';
 
 
-export function Searcher() {
+export function Categories() {
 	/** need states for search input and input change (searchName is current state) */
 	const [searchName, setSearchName] = useState('');
 	/** need states for filters (filter is array of current state: {"xyz": false, "abc":false, ...}) */
@@ -33,11 +33,6 @@ export function Searcher() {
 	const dispatch = useDispatch<AppDispatch>();
 	/** need access token for fetch as always */
 	const accessToken = useSelector(selectAccessToken);
-
-	const tracks = useSelector(selectTracks);
-	const artists = useSelector(selectArtists);
-	const albums = useSelector(selectAlbums);
-	const playlists = useSelector(selectPlaylists);
 
 	/** NEED FOR SEARCH INPUT */
 	/** parse filter state to string for easy reference and input to search */

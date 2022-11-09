@@ -21,7 +21,7 @@ export const SCOPE = [
 	'user-read-recently-played',
 	'user-modify-playback-state'
 ];
-export const TOKEN_NAME = "spotify_access_token";
+export const TOKEN = "";
 export const EXPIRATION_TIME = "spotify_expires_in";
 export const USER_ID = "spotify_user_id";
 export const SPOTIFY_API = new Spotify();
