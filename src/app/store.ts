@@ -5,6 +5,7 @@ import userInfoReducer from '../components/userinfo/userInfoSlice';
 import searcherReducer from '../components/search/searcherSlice';
 import featplaylistReducer from '../components/featured/featplaylistSlice';
 import newreleasesReducer from '../components/newreleases/newreleasesSlice';
+import categoriesReducer from '../components/categories/categoriesSlice';
 import { useDispatch } from 'react-redux';
 
 export const store = configureStore({
@@ -15,6 +16,7 @@ export const store = configureStore({
 	searcher: searcherReducer,
     featured: featplaylistReducer,	
 	newrelease: newreleasesReducer,	
+	categories: categoriesReducer,	
   },
 });
 

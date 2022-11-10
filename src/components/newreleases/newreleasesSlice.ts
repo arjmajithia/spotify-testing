@@ -17,7 +17,6 @@ export const newreleasesSlice = createSlice({
 	reducers: {
 		setNewReleases: (state, action: PayloadAction<string>) => {
 			state.newreleases = action.payload;
-			console.log(state.newreleases);
 		},
 	},
 });
@@ -26,13 +25,12 @@ export const newreleasesSlice = createSlice({
 export const { setNewReleases } = newreleasesSlice.actions;
 export const selectNewReleases = (state: RootState) => state.newrelease.newreleases;
 
-export const newReleasesAsync = (accessToken: string): AppThunk => dispatch => {
-	console.log(accessToken);
+export const newReleasesAsync = (accessToken: string, URL: string): AppThunk => dispatch => {
 	/** add access token and query new-releases with GET  */
 	const myHeaders = new Headers();
 	myHeaders.append('Authorization', 'Bearer '+ accessToken);
 
-	fetch(`https://api.spotify.com/v1/browse/new-releases`, {
+	fetch(URL, {
 		method: 'GET',
 		headers: myHeaders,
 	}).then(response => response.json()).then((data) => {

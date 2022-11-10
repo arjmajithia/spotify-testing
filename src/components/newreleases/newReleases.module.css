@@ -12,3 +12,26 @@
 	justify-content: center;
 	margin-top: 16px;
 }
+
+.tbl {
+	width: 100%;
+	display: table;
+}
+
+.tbl_body {
+	display: table-row-group;
+}
+
+.tbl_rows {
+	display: table-row;
+}
+
+.tbl_cell {
+	display: table-cell;
+	padding: 10px;
+	text-align: justify;
+}
+
+img {
+	float: left;
+}

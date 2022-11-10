@@ -5,6 +5,7 @@ import Homepage from './pages/Homepage/Homepage';
 import Search from './pages/Search/Search';
 import Featured from './pages/Featured/Featured';
 import NewReleases from './pages/NewReleases/NewReleases';
+import Categories from './pages/Categories/Categories'; 
 import * as RouteConstants from './constants/RouteConstants';
 import { Counter } from './components/counter/Counter';
 import './App.css';
@@ -17,6 +18,7 @@ function App() {
 		<nav>
 		<ul>
 			<li><Link to={RouteConstants.LIKED}>Counter</Link></li>
+			<li><Link to={RouteConstants.GENRES}>Categories(Genres)</Link></li>
 			<li><Link to={RouteConstants.SINGLES}>Search</Link></li>
 			<li><Link to={RouteConstants.FEATURED}>Featured</Link></li>
 			<li><Link to={RouteConstants.NEW}>New</Link></li>
@@ -25,6 +27,7 @@ function App() {
 		<Homepage />
 		<Switch>
 		<Route path={RouteConstants.LIKED}><Counter /></Route>
+		<Route path={RouteConstants.GENRES}><Categories /></Route>
 		<Route path={RouteConstants.SINGLES}><Search /></Route>
 		<Route path={RouteConstants.FEATURED}><Featured /></Route>
 		<Route path={RouteConstants.NEW}><NewReleases /></Route>

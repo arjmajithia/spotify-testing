@@ -3,90 +3,48 @@ import { AppThunk, RootState } from '../../app/store';
 import { setLoggedIn } from '../authorization/authorizationSlice';
 
 /** need all the variables that fetch returns, initialize to nothing */
-interface searcherState {
-	tracks: Object,
-	artists: Object,
-	albums: Object, 
-	playlists: Object,
-	show: Object,
-	episode: Object,
-	audiobook: Object,
+interface categoriesState {
+	categories: Object,
 }
 
-const initialState: searcherState  = {
-	tracks: {},
-	artists: {},
-	albums: {},
-	playlists: {},
-	show: {},
-	episode: {},
-	audiobook: {},
+const initialState: categoriesState  = {
+	categories: {},
 }
 
-export const searcherSlice = createSlice({
-	name: 'searcher',
+export const categoriesSlice = createSlice({
+	name: 'categories',
 	initialState,
 	reducers: {
-		setTracks: (state, action: PayloadAction<string>) => {
-			state.tracks = action.payload;
-			console.log(state.tracks);
-		},
-		setArtists: (state, action: PayloadAction<string>) => {
-			state.artists = action.payload;
-			console.log(state.artists);
-		},
-		setAlbums: (state, action: PayloadAction<string>) => {
-			state.albums = action.payload;
-			console.log(state.albums);
-		},
-		setPlaylists: (state, action: PayloadAction<Object>) => {
-			state.playlists = action.payload;
-			console.log(state.playlists);
-		},
-		setShow: (state, action: PayloadAction<Object>) => {
-			state.show = action.payload;
-			console.log(state.show);
-		},
-		setEpisode: (state, action: PayloadAction<Object>) => {
-			state.episode = action.payload;
-			console.log(state.episode);
-		},
-		setAudiobook: (state, action: PayloadAction<Object>) => {
-			state.audiobook = action.payload;
-			console.log(state.audiobook);
+		setCategories: (state, action: PayloadAction<string>) => {
+			state.categories = action.payload;
+			console.log(state.categories);
 		},
 	},
 });
 
 /** want to be able to return slice actions and data */
-export const { setTracks, setArtists, setAlbums, setPlaylists, setShow, setEpisode, setAudiobook } = searcherSlice.actions;
-export const selectTracks = (state: RootState) => state.searcher.tracks;
-export const selectArtists = (state: RootState) => state.searcher.artists;
-export const selectAlbums = (state: RootState) => state.searcher.albums;
-export const selectPlaylists = (state: RootState) => state.searcher.playlists;
-export const selectShow = (state: RootState) => state.searcher.show;
-export const selectEpisode = (state: RootState) => state.searcher.episode;
-export const selectAudiobook = (state: RootState) => state.searcher.audiobook;
+export const { setCategories } = categoriesSlice.actions;
+export const selectCategories = (state: RootState) => state.categories;
 
 /** want authorization token, search query, and filters to pass into api query  */
-export const setSearchAsync = (accessToken: string, search: string, filters: string): AppThunk => dispatch => {
+export const setCategoriesAsync = (accessToken: string, id: string = ""): AppThunk => dispatch => {
 	/** add access token and query search with GET  */
 	const myHeaders = new Headers();
 	myHeaders.append('Authorization', 'Bearer '+ accessToken);
+	let queryURL = '';
 
-	fetch(`https://api.spotify.com/v1/search?q=${search}&type=${filters}`, {
+	if(id === ""){
+		queryURL = `https://api.spotify.com/v1/browse/categories`;
+	} else {
+		queryURL = `https://api.spotify.com/v1/browse/categories/${id}`;
+	}
+
+	fetch(queryURL, {
 		method: 'GET',
 		headers: myHeaders,
 	}).then(response => response.json()).then((data) => {
-		console.log(data); 
 		/** add returned data to state  */
-		dispatch(setTracks(data.tracks ? data.tracks : {})); 
-		dispatch(setArtists(data.artists ? data.artists : {})); 
-		dispatch(setAlbums(data.albums ? data.albums : {})); 
-		dispatch(setPlaylists(data.playlists ? data.playlists : {})); 
-		dispatch(setShow(data.shows ? data.shows : {})); 
-		dispatch(setEpisode(data.episodes ? data.episodes : {})); 
-		dispatch(setAudiobook(data.audiobooks ? data.audiobooks : {})); 
+		dispatch(setCategories(data.categories ? data.categories : data)); 
 	}).catch((error) => {
 		console.log(error); 
 		/** 401 is bad token, reauthorization needed  */
@@ -94,4 +52,4 @@ export const setSearchAsync = (accessToken: string, search: string, filters: str
 	});
 };
 
-export default searcherSlice.reducer;
+export default categoriesSlice.reducer;

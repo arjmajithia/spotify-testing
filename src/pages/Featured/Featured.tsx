@@ -1,7 +1,6 @@
 import { FeaturedPlaylists } from '../../components/featured/FeaturedPlaylists';
-import { Searcher } from '../../components/search/Searcher';
 
-export default function Search() {
+export default function Featured() {
 	return (
 		<div>
 		<h2>Featured Playlists</h2>
