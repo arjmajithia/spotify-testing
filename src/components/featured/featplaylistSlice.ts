@@ -25,12 +25,13 @@ export const { setFeatPlaylist } = featuredSlice.actions;
 
 export const selectFeatPlaylist = (state: RootState) => state.featured.featplaylist;
 
-export const featPlaylistAsync = (accessToken: string): AppThunk => dispatch => {
+export const featPlaylistAsync = (accessToken: string, getURL: string): AppThunk => dispatch => {
 	console.log(accessToken);
+	console.log(getURL);
 	const myHeaders = new Headers();
 	myHeaders.append('Authorization', 'Bearer '+ accessToken);
 
-	fetch(`https://api.spotify.com/v1/browse/featured-playlists`, {
+	fetch(getURL, {
 		method: 'GET',
 		headers: myHeaders,
 	}).then(response => response.json()).then((data) => {

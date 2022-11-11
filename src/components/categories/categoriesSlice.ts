@@ -24,17 +24,21 @@ export const categoriesSlice = createSlice({
 
 /** want to be able to return slice actions and data */
 export const { setCategories } = categoriesSlice.actions;
-export const selectCategories = (state: RootState) => state.categories;
+export const selectCategories = (state: RootState) => state.categories.categories;
 
 /** want authorization token, search query, and filters to pass into api query  */
-export const setCategoriesAsync = (accessToken: string, id: string = ""): AppThunk => dispatch => {
+export const setCategoriesAsync = (accessToken: string, id: string = "", url: string = ""): AppThunk => dispatch => {
 	/** add access token and query search with GET  */
 	const myHeaders = new Headers();
 	myHeaders.append('Authorization', 'Bearer '+ accessToken);
 	let queryURL = '';
 
 	if(id === ""){
-		queryURL = `https://api.spotify.com/v1/browse/categories`;
+		if(url !== ""){
+			queryURL = `https://api.spotify.com/v1/browse/categories` + url;
+		} else {
+			queryURL = `https://api.spotify.com/v1/browse/categories`;
+		}
 	} else {
 		queryURL = `https://api.spotify.com/v1/browse/categories/${id}`;
 	}

@@ -69,12 +69,12 @@ export const selectEpisode = (state: RootState) => state.searcher.episode;
 export const selectAudiobook = (state: RootState) => state.searcher.audiobook;
 
 /** want authorization token, search query, and filters to pass into api query  */
-export const setSearchAsync = (accessToken: string, search: string, filters: string): AppThunk => dispatch => {
+export const setSearchAsync = (accessToken: string, URL: string): AppThunk => dispatch => {
 	/** add access token and query search with GET  */
 	const myHeaders = new Headers();
 	myHeaders.append('Authorization', 'Bearer '+ accessToken);
 
-	fetch(`https://api.spotify.com/v1/search?q=${search}&type=${filters}`, {
+	fetch(URL, {
 		method: 'GET',
 		headers: myHeaders,
 	}).then(response => response.json()).then((data) => {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectTracks, selectArtists, selectAlbums, selectPlaylists, setSearchAsync } from './searcherSlice';
+import { selectTracks, selectArtists, selectAlbums, selectPlaylists, setSearchAsync, selectShow, selectEpisode, selectAudiobook } from './searcherSlice';
 import styles from './Searcher.module.css';
 import { AppDispatch } from '../../app/store';
 import { selectAccessToken } from '../authorization/authorizationSlice';
@@ -38,6 +38,9 @@ export function Searcher() {
 	const artists = useSelector(selectArtists);
 	const albums = useSelector(selectAlbums);
 	const playlists = useSelector(selectPlaylists);
+	const shows  = useSelector(selectShow);
+	const episodes = useSelector(selectEpisode);
+	const audiobooks = useSelector(selectAudiobook);
 
 	/** NEED FOR SEARCH INPUT */
 	/** parse filter state to string for easy reference and input to search */
@@ -50,11 +53,9 @@ export function Searcher() {
 		return output;
 	}
 	/** search query! */
-	function querySpotify(accessToken: string, search: string, filters: string) {
-		console.log(accessToken);
-		console.log(search);
-		console.log(filters);
-		dispatch(setSearchAsync(accessToken, search, filters));
+	function querySpotify(accessToken: string, URL: string) {
+		dispatch(setSearchAsync(accessToken, URL));
+		console.log(FilterParse());
 	}
 
 	return (
@@ -75,7 +76,8 @@ export function Searcher() {
 		 <br></br>
 		 <br></br>
 		 <p>{FilterParse()}</p>
-		  <Button variant="contained" size="large" color="primary" onClick={() => querySpotify(accessToken, searchName, FilterParse())}><Typography>get song</Typography></Button>
+		  <Button variant="contained" size="large" color="primary" onClick={() => querySpotify(accessToken, `https://api.spotify.com/v1/search?q=${searchName}&type=${FilterParse()}`)}><Typography>get song</Typography></Button>
+		  {audiobooks &&<p>{JSON.stringify(audiobooks)}</p>}
 		</div>
 	);
 }
