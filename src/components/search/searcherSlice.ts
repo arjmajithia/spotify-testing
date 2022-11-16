@@ -29,31 +29,24 @@ export const searcherSlice = createSlice({
 	reducers: {
 		setTracks: (state, action: PayloadAction<string>) => {
 			state.tracks = action.payload;
-			console.log(state.tracks);
 		},
 		setArtists: (state, action: PayloadAction<string>) => {
 			state.artists = action.payload;
-			console.log(state.artists);
 		},
 		setAlbums: (state, action: PayloadAction<string>) => {
 			state.albums = action.payload;
-			console.log(state.albums);
 		},
 		setPlaylists: (state, action: PayloadAction<Object>) => {
 			state.playlists = action.payload;
-			console.log(state.playlists);
 		},
 		setShow: (state, action: PayloadAction<Object>) => {
 			state.show = action.payload;
-			console.log(state.show);
 		},
 		setEpisode: (state, action: PayloadAction<Object>) => {
 			state.episode = action.payload;
-			console.log(state.episode);
 		},
 		setAudiobook: (state, action: PayloadAction<Object>) => {
 			state.audiobook = action.payload;
-			console.log(state.audiobook);
 		},
 	},
 });
@@ -92,6 +85,99 @@ export const setSearchAsync = (accessToken: string, URL: string): AppThunk => di
 		/** 401 is bad token, reauthorization needed  */
 		if (error instanceof XMLHttpRequest) { if (error.status === 401) { dispatch(setLoggedIn(false)); } }
 	});
+};
+
+export const refreshObjectAsync = (accessToken: string, URL: string, objectType: string): AppThunk => dispatch => {
+	/** add access token and query new-releases with GET  */
+	const myHeaders = new Headers();
+	myHeaders.append('Authorization', 'Bearer '+ accessToken);
+
+	console.log(URL);
+	/** type of return */
+	if(objectType === "playlist") { 
+		fetch(URL, {
+			method: 'GET',
+			headers: myHeaders,
+		}).then(response => response.json()).then((data) => {
+			console.log(data); 
+			/** add returned data to state  */
+			dispatch(setPlaylists(data.playlists ? data.playlists : {})); 
+		}).catch((error) => {
+			console.log(error); 
+			/** 401 is bad token, reauthorization needed  */
+				if (error instanceof XMLHttpRequest) { if (error.status === 401) { dispatch(setLoggedIn(false)); } }
+		});
+	}
+	if(objectType === "album") { 
+		fetch(URL, {
+			method: 'GET',
+			headers: myHeaders,
+		}).then(response => response.json()).then((data) => {
+			console.log(data); 
+			/** add returned data to state  */
+			dispatch(setAlbums(data.albums ? data.albums : {})); 
+		}).catch((error) => {
+			console.log(error); 
+			/** 401 is bad token, reauthorization needed  */
+				if (error instanceof XMLHttpRequest) { if (error.status === 401) { dispatch(setLoggedIn(false)); } }
+		});
+	}
+	if(objectType === "track") { 
+		fetch(URL, {
+			method: 'GET',
+			headers: myHeaders,
+		}).then(response => response.json()).then((data) => {
+			console.log(data); 
+			/** add returned data to state  */
+			dispatch(setTracks(data.tracks ? data.tracks : {})); 
+		}).catch((error) => {
+			console.log(error); 
+			/** 401 is bad token, reauthorization needed  */
+				if (error instanceof XMLHttpRequest) { if (error.status === 401) { dispatch(setLoggedIn(false)); } }
+		});
+	}
+	if(objectType === "artist") { 
+		fetch(URL, {
+			method: 'GET',
+			headers: myHeaders,
+		}).then(response => response.json()).then((data) => {
+			console.log(data); 
+			/** add returned data to state  */
+			dispatch(setArtists(data.artists ? data.artists : {})); 
+		}).catch((error) => {
+			console.log(error); 
+			/** 401 is bad token, reauthorization needed  */
+				if (error instanceof XMLHttpRequest) { if (error.status === 401) { dispatch(setLoggedIn(false)); } }
+		});
+	}
+	if(objectType === "episode") { 
+		fetch(URL, {
+			method: 'GET',
+			headers: myHeaders,
+		}).then(response => response.json()).then((data) => {
+			console.log(data); 
+			/** add returned data to state  */
+			dispatch(setEpisode(data.episodes ? data.episodes : {})); 
+		}).catch((error) => {
+			console.log(error); 
+			/** 401 is bad token, reauthorization needed  */
+				if (error instanceof XMLHttpRequest) { if (error.status === 401) { dispatch(setLoggedIn(false)); } }
+		});
+	}
+	if(objectType === "show") { 
+		fetch(URL, {
+			method: 'GET',
+			headers: myHeaders,
+		}).then(response => response.json()).then((data) => {
+			console.log(data); 
+			/** add returned data to state  */
+			dispatch(setShow(data.shows ? data.shows : {})); 
+		}).catch((error) => {
+			console.log(error); 
+			/** 401 is bad token, reauthorization needed  */
+				if (error instanceof XMLHttpRequest) { if (error.status === 401) { dispatch(setLoggedIn(false)); } }
+		});
+	}
 };
 
 export default searcherSlice.reducer;

@@ -29,10 +29,8 @@ export function FeaturedPlaylists() {
 		const summary = document.createElement("summary");
 		const playlistLink = document.createElement("a");
 		let summaryHTML = "";
-		let htmlBody = "";
 		if(index || index === 0) {
 		   summaryHTML = item[index]['name'];
-		   htmlBody = item[index]['type'];
 		   playlistLink.href = item[index]['external_urls']['spotify'];
 		   playlistLink.innerHTML = item[index]['name'];
 		} 
@@ -77,7 +75,7 @@ export function FeaturedPlaylists() {
 		output.appendChild(tblContainer);
 		return(output);
 	}
-	function Test() {
+	function outputDataAsync() {
 		document.getElementById("myDiv")?.appendChild(parseReturned(featPlaylist));
 	}
 
@@ -86,7 +84,7 @@ export function FeaturedPlaylists() {
 			{isLoggedIn && <Button variant="contained" size="large" color="primary" onClick={() => callFeatured(accessToken, `https://api.spotify.com/v1/browse/featured-playlists`)}><Typography>get featured</Typography></Button>}
 			{isLoggedIn && featPlaylist['previous'] && <Button className={styles.row} variant="contained" size="large" color="primary" onClick={() => callFeatured(accessToken, featPlaylist['previous'])}><Typography>Previous</Typography></Button>}
 			{isLoggedIn && featPlaylist['next'] && <Button className={styles.row} variant="contained" size="large" color="primary" onClick={() => callFeatured(accessToken, featPlaylist['next'])}><Typography>Next</Typography></Button>}
-			{isLoggedIn && (featPlaylist !== {}) && Test()}
+			{isLoggedIn && (featPlaylist !== {}) && outputDataAsync()}
 			<div id="myDiv"></div>
 		</div>
 	);

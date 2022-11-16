@@ -7,9 +7,6 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../app/store';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { useEffect } from 'react';
-import { TableContainer, Paper, TableCell } from '@material-ui/core';
-import { Table, TableBody, TableRow } from '@material-ui/core';
 
 export function NewReleases() {
 	const dispatch = useDispatch<AppDispatch>();
@@ -108,8 +105,7 @@ export function NewReleases() {
 	};
 
 	function outputDataAsync() {
-		const parent = document.getElementById("myDiv");
-		parent?.appendChild(parseReturned(newReleases));
+		document.getElementById("myDiv")?.appendChild(parseReturned(newReleases));
 	}
 
 	return (

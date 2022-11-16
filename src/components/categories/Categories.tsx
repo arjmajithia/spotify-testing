@@ -48,7 +48,7 @@ export function Categories() {
 		} else {
 		   summaryHTML = item['name'].concat("<br>");
 		   htmlBody = item['id'];
-		   categoryLink.onclick = () => console.log(item['id']);
+		   categoryLink.href = item['href'];
 		   categoryLink.innerHTML = item['name'];
 		}
 		 summary.innerHTML = summaryHTML;		
@@ -86,7 +86,7 @@ export function Categories() {
 
 				  tblRow.appendChild(wrapper);
 			 }
-		} else if(Object.keys(categories).length !== 0) 
+		} else if(Object.keys(categories).length !== 0) /** if categories is composed of one item */
 			{
 			const wrapper = document.createElement("div");
 			const image = document.createElement("img");
@@ -108,7 +108,7 @@ export function Categories() {
 	}
 
 	function renderOnLoad() {
-		document.getElementById("myDiv")?.appendChild(parseReturned(categories))
+		document.getElementById("myDiv")?.appendChild(parseReturned(categories));
 	}
 
 	return (
@@ -116,7 +116,7 @@ export function Categories() {
 		 {isLoggedIn && <TextField label="Search a category ID" variant="outlined" onChange={(e) => setCategoryid(e.target.value)}></TextField>}
 		 <br></br>
 		 <br></br>
-		 {isLoggedIn && <Button variant="contained" size="large" color="primary" onClick={() => querySpotify(accessToken, categoryid)}><Typography>get song</Typography></Button>}
+		 {isLoggedIn && <Button variant="contained" size="large" color="primary" onClick={() => querySpotify(accessToken, categoryid)}><Typography>view genres</Typography></Button>}
 		 {isLoggedIn && categories['previous'] && <Button className={styles.row} variant="contained" size="large" color="primary" onClick={() => querySpotify(accessToken, "", parseURL(categories['previous']))}><Typography>Previous</Typography></Button>}
 		 {isLoggedIn && categories['next'] && <Button className={styles.row} variant="contained" size="large" color="primary" onClick={() => querySpotify(accessToken, "", parseURL(categories['next']))}><Typography>Next</Typography></Button>}
 		 <br></br><br></br>
