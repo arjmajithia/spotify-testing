@@ -11,6 +11,7 @@ const initialState: categoriesState  = {
 	categories: {},
 }
 
+/** set state values from data returned as reducers */
 export const categoriesSlice = createSlice({
 	name: 'categories',
 	initialState,

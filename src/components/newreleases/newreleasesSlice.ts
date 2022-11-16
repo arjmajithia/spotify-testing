@@ -11,6 +11,7 @@ const initialState: newreleasesState  = {
 	newreleases: {},
 }
 
+/** set state values from data returned as reducers */
 export const newreleasesSlice = createSlice({
 	name: 'newrelease',
 	initialState,
@@ -25,6 +26,7 @@ export const newreleasesSlice = createSlice({
 export const { setNewReleases } = newreleasesSlice.actions;
 export const selectNewReleases = (state: RootState) => state.newrelease.newreleases;
 
+/** want authorization token, search query, and filters to pass into api query  */
 export const newReleasesAsync = (accessToken: string, URL: string): AppThunk => dispatch => {
 	/** add access token and query new-releases with GET  */
 	const myHeaders = new Headers();

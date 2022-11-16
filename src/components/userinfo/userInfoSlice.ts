@@ -17,6 +17,7 @@ const initialState: userInfoState = {
 	followers: {},
 }
 
+/** set state values from data returned as reducers */
 export const userInfoSlice = createSlice({
 	name: 'userinfo',
 	initialState,

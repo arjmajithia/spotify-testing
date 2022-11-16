@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store'
 
-
+/** set up states and initialize at empty */
 interface AuthorizationState {
 	loggedIn: boolean;
 	accessToken: string;
@@ -14,6 +14,7 @@ const initialState: AuthorizationState = {
 	tokenExpiryDate: '',
 };
 
+/** set state values from data returned as reducers */
 export const authorizationSlice = createSlice({
 	name: 'authorization',
 	initialState,
@@ -32,8 +33,10 @@ export const authorizationSlice = createSlice({
 	}
 });
 
+/** setState values as action part of Slice */
 export const { setLoggedIn, setAccessToken, setTokenExpiryDate } = authorizationSlice.actions;
 
+/** selectState attaches state data to selectState value */
 export const selectIsLoggedIn = (state: RootState) => state.authorization.loggedIn;
 export const selectAccessToken = (state: RootState) => state.authorization.accessToken;
 export const selectTokenExpiryDate = (state: RootState) => state.authorization.tokenExpiryDate;

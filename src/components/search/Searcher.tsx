@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import ReactDOM from 'react-dom';
 import { selectTracks, 
 		 selectArtists, 
 		 selectAlbums, 
@@ -80,7 +79,7 @@ export function Searcher() {
 		}
 		return output;
 	}
-	/** search query! */
+	/** search query! Runs on normal search */
 	function querySpotify(accessToken: string, query: string, filters: string) {
 
 		let errorContainer = document.getElementById("errorDiv");
@@ -101,6 +100,7 @@ export function Searcher() {
 			console.log("Cant have query empty");
 		}
 	}
+	/** Search query! This runs on button presses (all next/prev buttons) */
 	function refreshData(accessToken: string, getURL: string, objectType: string) {
 		if(getURL !== "") {
 			dispatch(refreshObjectAsync(accessToken, getURL, objectType));
@@ -108,6 +108,7 @@ export function Searcher() {
 	}
 
 	
+	/** automatically parses data returned. This is needed for automatically updating myDiv div with new data */
 	function parseReturned(
 		tracks: Object,
 		artists: Object,
@@ -117,6 +118,7 @@ export function Searcher() {
 		episodes: Object,
 		audiobooks: Object) 
 	{
+		/** check if the data is empty: if it is not, then run parser */
 		const container = document.getElementById("myDiv");
 		if(Object.keys(tracks).length > 1) {
 			if(trackNav) {
@@ -159,6 +161,22 @@ export function Searcher() {
 			}
 		}
 	}
+
+
+
+	/** DETAILS FUNCTIONS:
+	*
+	*	Output Detail element
+	*
+	*	Empty: Needed for switch statements (opendetail does not work without declared details)
+	*	artistDetail: returns name, follower count, popularity (/100), genres, and link to listen on Spotify 
+	*	playlistDetail: returns name, owner, track number and link to open on Spotify
+	*	trackDetail: returns name, release type, release date, duration (in m:s), artists, and link to Spotify
+	*	showDetail: returns name, description, publisher, length (# of episodes in show), languages, and link to Spotify
+	*	episodeDetail: returns name, description, release date, duration (in m:s), languages, and link to Spotify
+	*	albumDetail: returns name, type (single/album/etc), release date, total tracks, artists, link to Spotify
+	*
+	*/
 
 	function emptyDetail() {
 		const details = document.createElement("details");
@@ -221,6 +239,7 @@ export function Searcher() {
 		  return(details);
 	}
 
+	/** MILLISECOND TO SECOND FUNCTION  */
 	function ms2S(input: Number) {
 		const output = Math.floor(input/60000) + (((input/1000)%60)/100);
 		return output.toFixed(2).toString();
@@ -271,7 +290,7 @@ export function Searcher() {
 		details.insertAdjacentText("beforeend", "Publisher: ");
 		details.insertAdjacentHTML("beforeend", item[index]['publisher'].concat("<br>"));
 
-		details.insertAdjacentText("beforeend", "Length: ");
+		details.insertAdjacentText("beforeend", "Episodes: ");
 		details.insertAdjacentHTML("beforeend", item[index]['total_episodes'].toString().concat("<br>"));
 
 		details.insertAdjacentText("beforeend", "Languages: ");
@@ -333,7 +352,7 @@ export function Searcher() {
 		details.insertAdjacentText("beforeend", "Release: ");
 		details.insertAdjacentHTML("beforeend", item[index]['release_date'].concat("<br>"));
 		details.insertAdjacentHTML("beforeend", JSON.stringify(item[index]['total_tracks']).concat(" tracks<br>"));
-		/** link to tracks? ===> send through tracks parser  */
+
 		details.insertAdjacentText("beforeend", "Artists: ");
 		for (let i = 0; i < item[index]['artists'].length; i++) {
 			if(item[index]['artists'].length - i < 2) {
@@ -356,12 +375,29 @@ export function Searcher() {
 		return(details);
 	}
 
+
+	/** PARSER FUNCTIONS:
+	*
+	*	Output wrapper Div element
+	*
+	*	Error: needed for audiobooks as well as empty query error (FOR FUTURE: USE THIS ERROR PARSER FOR OTHER ERRORS)
+	*	parsePlaylist: for albums and playlists. returns image with name alt and details attached to wrapper
+	*	parseShow: for shows. returns image with name alt and details attached to wrapper
+	*	parseEpisode: for episodes. returns image with name alt and details attached to wrapper 
+	*	parseArtist:  for episodes. returns image with name alt and details attached to wrapper
+	*	parseTrack: for tracks. returns same
+	*
+	*/
+
+
 	function parseError(id: string, error: string, errorDetails: string) {
+		/** empty the div that the data is sent to */
 		let container = document.getElementById("errorDiv");
 		if(container?.childElementCount > 0){
 			while(container?.firstChild){ container.removeChild(container.firstChild); }
 		}
 
+		/** declare and attach elements (ERROR: top view error on summary, should see rest of error when open detail) */
 		const details = document.createElement("details");
 		const summary = document.createElement("summary");
 		summary.innerHTML = error.concat("<br>");
@@ -378,6 +414,7 @@ export function Searcher() {
 	function parsePlaylist(object: Object) {
 		if(object['href'] !== undefined){
 		const objectType = object['href'].split("&")[1].split("=")[1];
+		/** makes sure that no other navigatio arrays are being shown */
 		if(objectType === "playlist" && !playlistNav) { 
 			if(albumNav === true) { setAlbumNav(false); }
 			if(trackNav === true) { setTrackNav(false); }
@@ -395,22 +432,28 @@ export function Searcher() {
 			setAlbumNav(true); 
 		}
 
+		/** empty the div that the data is sent to */
 		let container = document.getElementById("myDiv");
 		if(container?.childElementCount > 0){
 			while(container?.firstChild){ container.removeChild(container.firstChild); }
 		}
 
+		/** initialize elements */
 		const output = document.createElement("div");
 		const tblContainer = document.createElement("table");
 	    tblContainer.className = '{styles.tbl}';	
+
 		if(object !== undefined && object) {
+			/** initialize body element, set item for easier access */
 			const tblBody = document.createElement("tbody");
 			let item = object['items'];
 			if(item !== undefined) {
 			  let tblRow = document.createElement("tr");
 			  let details = emptyDetail();
 			  for (let i = 0; i < item.length; i++){
+				  /** 3 items per row: use modulo to determine it */
 				  if(i%3 === 0){ tblBody.appendChild(tblRow); tblRow = document.createElement("tr"); }
+				  /** initialize wrapper,image and details (details from detail func) */
 				  const wrapper = document.createElement("td");
 				  const image = document.createElement("img");
 				  if(objectType === "playlist") { 
@@ -419,15 +462,19 @@ export function Searcher() {
 				  else if(objectType === "album") { 
 					  details = albumDetail(item, i); 
 				  }
+
+				  /** attach image, alt to image element */
 				  image.src = item[i]['images'][0]['url'];
 				  image.alt = item[i]['name'];
 
+				  /** append elements */
 				  wrapper.appendChild(details);
 				  wrapper.appendChild(image);
 
 				  tblRow.appendChild(wrapper);
 			 }
 		} 
+			/** append and return necessary elements */
 			tblContainer.appendChild(tblBody);
 		}
 		output.appendChild(tblContainer);
@@ -438,6 +485,7 @@ export function Searcher() {
 	function parseShow(object: Object) {
 		if(object['href'] !== undefined){
 		const objectType = object['href'].split("&")[1].split("=")[1];
+		/** makes sure that no other navigatio arrays are being shown */
 		if(objectType === "show" && !showNav) { 
 			if(playlistNav === true) { setPlaylistNav(false); }
 			if(albumNav === true) { setAlbumNav(false); }
@@ -447,31 +495,39 @@ export function Searcher() {
 			setShowNav(true); 
 		}
 
+		/** empty the div that the data is sent to */
 		let container = document.getElementById("myDiv");
 		if(container?.childElementCount > 0){
 			while(container?.firstChild){ container.removeChild(container.firstChild); }
 		}
 
+		/** initialize elements */
 		const output = document.createElement("div");
 		const tblContainer = document.createElement("table");
 	    tblContainer.className = '{styles.tbl}';	
+
 		if(object !== undefined && object) {
+			/** initialize body element, set item for easier access */
 			const tblBody = document.createElement("tbody");
 			let item = object['items'];
 			if(item !== undefined) {
 			  let tblRow = document.createElement("tr");
 			  let details = emptyDetail();
 			  for (let i = 0; i < item.length; i++){
+				  /** 3 items per row: use modulo to determine it */
 				  if(i%3 === 0){ tblBody.appendChild(tblRow); tblRow = document.createElement("tr"); }
+				  /** initialize wrapper,image and details (details from detail func) */
 				  const wrapper = document.createElement("td");
 				  if(item[i]['images'][1] !== undefined) {
 				   const image = document.createElement("img");
 				   if(objectType === "show") { 
 				       details = showDetail(item, i); 
 				   }
+				  /** attach image, alt to image element */
 				   image.src = item[i]['images'][1]['url'];
 				   image.alt = item[i]['name'];
 
+				  /** append elements */
 				   wrapper.appendChild(details);
 				   wrapper.appendChild(image);
 
@@ -486,6 +542,7 @@ export function Searcher() {
 				  }
 			 }
 		} 
+			/** append and return necessary elements */
 			tblContainer.appendChild(tblBody);
 		}
 		output.appendChild(tblContainer);
@@ -496,6 +553,7 @@ export function Searcher() {
 	function parseEpisode(object: Object) {
 		if(object['href'] !== undefined){
 		const objectType = object['href'].split("&")[1].split("=")[1];
+		/** makes sure that no other navigatio arrays are being shown */
 		if(objectType === "episode" && !episodeNav) { 
 			if(playlistNav === true) { setPlaylistNav(false); }
 			if(albumNav === true) { setAlbumNav(false); }
@@ -505,31 +563,39 @@ export function Searcher() {
 			setEpisodeNav(true); 
 		}
 
+		/** empty the div that the data is sent to */
 		let container = document.getElementById("myDiv");
 		if(container?.childElementCount > 0){
 			while(container?.firstChild){ container.removeChild(container.firstChild); }
 		}
 
+		/** empty the div that the data is sent to */
 		const output = document.createElement("div");
 		const tblContainer = document.createElement("table");
 	    tblContainer.className = '{styles.tbl}';	
+
 		if(object !== undefined && object) {
+			/** initialize body element, set item for easier access */
 			const tblBody = document.createElement("tbody");
 			let item = object['items'];
 			if(item !== undefined) {
 			  let tblRow = document.createElement("tr");
 			  let details = emptyDetail();
 			  for (let i = 0; i < item.length; i++){
+				  /** 3 items per row: use modulo to determine it */
 				  if(i%3 === 0){ tblBody.appendChild(tblRow); tblRow = document.createElement("tr"); }
+				  /** initialize wrapper,image and details (details from detail func) */
 				  const wrapper = document.createElement("td");
 				  if(item[i]['images'][1] !== undefined) {
 				   const image = document.createElement("img");
 				   if(objectType === "episode") { 
 				       details = episodeDetail(item, i); 
 				   }
+				  /** attach image, alt to image element */
 				   image.src = item[i]['images'][1]['url'];
 				   image.alt = item[i]['name'];
 
+				  /** append elements */
 				   wrapper.appendChild(details);
 				   wrapper.appendChild(image);
 
@@ -544,6 +610,7 @@ export function Searcher() {
 				  }
 			 }
 		} 
+			/** append and return necessary elements */
 			tblContainer.appendChild(tblBody);
 		}
 		output.appendChild(tblContainer);
@@ -554,6 +621,7 @@ export function Searcher() {
 	function parseArtist(object: Object) {
 		if(object['href'] !== undefined){
 		const objectType = object['href'].split("&")[1].split("=")[1];
+		/** makes sure that no other navigatio arrays are being shown */
 		if(objectType === "artist" && !artistNav) { 
 			if(playlistNav === true) { setPlaylistNav(false); }
 			if(albumNav === true) { setAlbumNav(false); }
@@ -563,21 +631,26 @@ export function Searcher() {
 			setArtistNav(true); 
 		}
 
+		/** empty the div that the data is sent to */
 		let container = document.getElementById("myDiv");
 		if(container?.childElementCount > 0){
 			while(container?.firstChild){ container.removeChild(container.firstChild); }
 		}
 
+		/** initialize elements */
 		const output = document.createElement("div");
 		const tblContainer = document.createElement("table");
 	    tblContainer.className = '{styles.tbl}';	
+
 		if(object !== undefined && object) {
+			/** initialize body element, set item for easier access */
 			const tblBody = document.createElement("tbody");
 			let item = object['items'];
 			if(item !== undefined) {
 			  let tblRow = document.createElement("tr");
 			  let details = emptyDetail();
 			  for (let i = 0; i < item.length; i++){
+				  /** 3 items per row: use modulo to determine it */
 				  if(i%3 === 0){ tblBody.appendChild(tblRow); tblRow = document.createElement("tr"); }
 				  const wrapper = document.createElement("td");
 				  if(item[i]['images'][1] !== undefined) {
@@ -585,9 +658,11 @@ export function Searcher() {
 				   if(objectType === "artist") { 
 				       details = artistDetail(item, i); 
 				   }
+				  /** attach image, alt to image element */
 				   image.src = item[i]['images'][1]['url'];
 				   image.alt = item[i]['name'];
 
+				  /** append elements */
 				   wrapper.appendChild(details);
 				   wrapper.appendChild(image);
 
@@ -602,6 +677,7 @@ export function Searcher() {
 				  }
 			 }
 		} 
+			/** append and return necessary elements */
 			tblContainer.appendChild(tblBody);
 		}
 		output.appendChild(tblContainer);
@@ -612,6 +688,7 @@ export function Searcher() {
 	function parseTrack(object: Object) {
 		if(object['href'] !== undefined){
 		const objectType = object['href'].split("&")[1].split("=")[1];
+		/** makes sure that no other navigatio arrays are being shown */
 		if(objectType === "track" && !trackNav) { 
 			if(playlistNav === true) { setPlaylistNav(false); }
 			if(showNav === true) { setShowNav(false); }
@@ -621,6 +698,7 @@ export function Searcher() {
 			setTrackNav(true); 
 		}
 
+		/** empty the div that the data is sent to */
 		let container = document.getElementById("myDiv");
 		if(container?.childElementCount > 0){
 			while(container?.firstChild){ container.removeChild(container.firstChild); }
@@ -629,28 +707,35 @@ export function Searcher() {
 		const output = document.createElement("div");
 		const tblContainer = document.createElement("table");
 	    tblContainer.className = '{styles.tbl}';	
+
 		if(object !== undefined && object) {
+			/** initialize body element, set item for easier access */
 			const tblBody = document.createElement("tbody");
 			let item = object['items'];
 			if(item !== undefined) {
 			  let tblRow = document.createElement("tr");
 			  let details = emptyDetail();
 			  for (let i = 0; i < item.length; i++){
+				  /** 3 items per row: use modulo to determine it */
 				  if(i%3 === 0){ tblBody.appendChild(tblRow); tblRow = document.createElement("tr"); }
+				  /** initialize wrapper,image and details (details from detail func) */
 				  const wrapper = document.createElement("td");
 				  const image = document.createElement("img");
 				  if(objectType === "track") { 
 					  details = trackDetail(item, i); 
 				  }
+				  /** attach image, alt to image element */
 				  image.src = item[i]['album']['images'][1]['url'];
 				  image.alt = item[i]['name'];
 
+				  /** append elements */
 				  wrapper.appendChild(details);
 				  wrapper.appendChild(image);
 
 				  tblRow.appendChild(wrapper);
 			 }
 		} 
+			/** append and return necessary elements */
 			tblContainer.appendChild(tblBody);
 		}
 		output.appendChild(tblContainer);
@@ -658,6 +743,7 @@ export function Searcher() {
 		}
 	}
 
+	/** add navigation buttons for each object */
 	function resultNavigation(object: Object) {
 		if(object['href'] !== undefined){
 		const objectType = object['href'].split("&")[1].split("=")[1];

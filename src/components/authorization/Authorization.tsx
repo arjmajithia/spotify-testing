@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
-import { setLoggedIn, setAccessToken, setTokenExpiryDate, selectIsLoggedIn, selectTokenExpiryDate } from './authorizationSlice';
+import { setLoggedIn, setAccessToken, setTokenExpiryDate, selectIsLoggedIn } from './authorizationSlice';
 import styles from '../counter/Counter.module.css';
 import { getAuthorizeHref } from '../../oauthConfig';
 import { getHashParams, removeHashParamsFromUrl } from '../../utils/hashUtils';
-import { AppDispatch, useAppDispatch } from '../../app/store';
+import { useAppDispatch } from '../../app/store';
 import { UserInfo } from '../userinfo/UserInfo';
 import { useAppSelector } from '../../app/hooks';
 
+/** pull expiry and token from hash, then remove params  */
 const hashParams = getHashParams();
 const access_token = hashParams.access_token;
 const expires_in = hashParams.expires_in;
@@ -16,12 +17,15 @@ export function Authorization() {
 	const isLoggedIn = useAppSelector(selectIsLoggedIn);
 	const dispatch = useAppDispatch();
 
+	/** onClick sets access_token, expiry time, and LoggedIn  */
 	useEffect(() => {
 		if (access_token) {
 			dispatch(setLoggedIn(true));
 			dispatch(setAccessToken(access_token));
 			dispatch(setTokenExpiryDate(Number(expires_in)));
 		}
+	/** unsure why UseEffect needs another dispatch call: eslint to disable the error  */
+	// eslint-disable-next-line
 	}, []);
 
 	return (

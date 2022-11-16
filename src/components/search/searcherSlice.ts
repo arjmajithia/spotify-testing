@@ -23,6 +23,7 @@ const initialState: searcherState  = {
 	audiobook: {},
 }
 
+/** set state values from data returned as reducers */
 export const searcherSlice = createSlice({
 	name: 'searcher',
 	initialState,
