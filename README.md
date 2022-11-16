@@ -4,7 +4,7 @@ MaterialUI for Buttons and formatting
 
 
 ### To-Dos:
-Add tailwindCSS implementation\
+TailwindCSS implementation and implement MaterialUI more thoroughly\
 Improve formatting\
 Improve responsivity\
 Improve data displaying
