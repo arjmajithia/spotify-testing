@@ -2,15 +2,15 @@ import { useSelector } from 'react-redux';
 import { selectFeatPlaylist, featPlaylistAsync } from './featplaylistSlice';
 import styles from './featPlaylist.module.css';
 import { selectIsLoggedIn,selectAccessToken } from '../authorization/authorizationSlice';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../app/store';
+import { useAppDispatch } from '../../app/store';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { useAppSelector } from '../../app/hooks';
 
 export function FeaturedPlaylists() {
-	const isLoggedIn = useSelector(selectIsLoggedIn);
-	const accessToken = useSelector(selectAccessToken);
-	const dispatch = useDispatch<AppDispatch>();
+	const isLoggedIn = useAppSelector(selectIsLoggedIn);
+	const accessToken = useAppSelector(selectAccessToken);
+	const dispatch = useAppDispatch();
 
 	const featPlaylist = useSelector(selectFeatPlaylist);
 

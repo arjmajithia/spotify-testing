@@ -1,24 +1,24 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCategoriesAsync, selectCategories } from './categoriesSlice';
-import { AppDispatch } from '../../app/store';
 import { selectAccessToken, selectIsLoggedIn } from '../authorization/authorizationSlice';
 
 import styles from './Categories.module.css';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { TextField } from '@material-ui/core';
+import { useAppSelector,useAppDispatch } from '../../app/hooks';
 
 
 export function Categories() {
 	/** need states for category id if added */
 	const [categoryid, setCategoryid] = useState('');
 
-	const dispatch = useDispatch<AppDispatch>();
+	const dispatch = useAppDispatch();
 	/** need access token for fetch as always, and isLogged to toggle button */
-	const accessToken = useSelector(selectAccessToken);
-	const isLoggedIn = useSelector(selectIsLoggedIn);
-	const categories = useSelector(selectCategories);
+	const accessToken = useAppSelector(selectAccessToken);
+	const isLoggedIn = useAppSelector(selectIsLoggedIn);
+	const categories = useAppSelector(selectCategories);
 
 	/** search query! */
 	function querySpotify(accessToken: string, id: string, url: string) {

@@ -8,6 +8,7 @@ import newreleasesReducer from '../components/newreleases/newreleasesSlice';
 import categoriesReducer from '../components/categories/categoriesSlice';
 import { useDispatch } from 'react-redux';
 
+/** ASYNC returns: add reducers to state allows for easier data calls and returns  */
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
@@ -20,6 +21,7 @@ export const store = configureStore({
   },
 });
 
+/** functions for actions and reducers that we declare in Slices  */
 export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export type RootState = ReturnType<typeof store.getState>;

@@ -53,14 +53,12 @@ export const checkProfileAsync  = (accessToken: string): AppThunk => dispatch =>
 		method: 'GET',
 		headers: myHeaders,
 	}).then(response => response.json()).then((data) => {
-		console.log(data); 
 		/** add returned data to state  */
 		dispatch(setDisplayName(data.display_name ? data.display_name : data.id)); 
 		dispatch(setType(data.type ? data.type : data.id)); 
 		dispatch(setUri(data.uri ? data.uri : data.id)); 
 		dispatch(setFollowers(data.followers ? data.followers : data.id)); 
 	}).catch((error) => {
-		console.log(error); 
 		/** 401 is bad token, reauthorization needed  */
 		if (error instanceof XMLHttpRequest) { if (error.status === 401) { dispatch(setLoggedIn(false)); } }
 	});

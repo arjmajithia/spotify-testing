@@ -1,22 +1,21 @@
 import DOMParser from 'react-dom';
-import { useSelector } from 'react-redux';
 import { selectNewReleases, newReleasesAsync } from './newreleasesSlice';
 import styles from './newReleases.module.css';
 import { selectIsLoggedIn,selectAccessToken } from '../authorization/authorizationSlice';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../app/store';
+import { useAppDispatch } from '../../app/store';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { useAppSelector } from '../../app/hooks';
 
 export function NewReleases() {
-	const dispatch = useDispatch<AppDispatch>();
+	const dispatch = useAppDispatch();
 
 	/** new releases to store returned data  */
-	const newReleases = useSelector(selectNewReleases);
+	const newReleases = useAppSelector(selectNewReleases);
 	/** need to make sure we are logged in  */
-	const isLoggedIn = useSelector(selectIsLoggedIn);
+	const isLoggedIn = useAppSelector(selectIsLoggedIn);
 	/** need the access token for Spotify to return correctly  */
-	const accessToken = useSelector(selectAccessToken);
+	const accessToken = useAppSelector(selectAccessToken);
 
 	function openDetail(detail: Element){
 		detail.open = !detail.open;
@@ -90,7 +89,6 @@ export function NewReleases() {
 			tblContainer.appendChild(tblBody);
 		}
 		output.appendChild(tblContainer);
-		console.log(output);
 		return(output);
 	}
 

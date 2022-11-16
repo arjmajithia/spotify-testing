@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import ReactDOM from 'react-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { selectTracks, 
 		 selectArtists, 
 		 selectAlbums, 
@@ -11,7 +10,7 @@ import { selectTracks,
 		 setSearchAsync,
 		 refreshObjectAsync } from './searcherSlice'; 
 import styles from './Searcher.module.css';
-import { AppDispatch } from '../../app/store';
+import { useAppDispatch } from '../../app/store';
 import { selectAccessToken, selectIsLoggedIn } from '../authorization/authorizationSlice';
 
 import Switch from '@material-ui/core/Switch';
@@ -20,6 +19,7 @@ import Typography from '@material-ui/core/Typography';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { TextField } from '@material-ui/core';
+import { useAppSelector } from '../../app/hooks';
 
 
 export function Searcher() {
@@ -52,18 +52,18 @@ export function Searcher() {
 		/** set the boolean when the checkbox is checked ; we are already removing on search */
 		if(event.target.name === "audiobook" && event.target.checked === true) { setShowAError(true); }
 	};
-	const dispatch = useDispatch<AppDispatch>();
-	const accessToken = useSelector(selectAccessToken);
-	const isLoggedIn = useSelector(selectIsLoggedIn);
+	const dispatch = useAppDispatch();
+	const accessToken = useAppSelector(selectAccessToken);
+	const isLoggedIn = useAppSelector(selectIsLoggedIn);
 
 	/** Initialize data (multiple types of return so multiple variables) */
-	const tracks = useSelector(selectTracks);
-	const artists = useSelector(selectArtists);
-	const albums = useSelector(selectAlbums);
-	const playlists = useSelector(selectPlaylists);
-	const shows  = useSelector(selectShow);
-	const episodes = useSelector(selectEpisode);
-	const audiobooks = useSelector(selectAudiobook);
+	const tracks = useAppSelector(selectTracks);
+	const artists = useAppSelector(selectArtists);
+	const albums = useAppSelector(selectAlbums);
+	const playlists = useAppSelector(selectPlaylists);
+	const shows  = useAppSelector(selectShow);
+	const episodes = useAppSelector(selectEpisode);
+	const audiobooks = useAppSelector(selectAudiobook);
 
 	/** DETAILS NEEDS TO BE DEFINED  */
 	/** SINCE EACH TYPE HAS A DIFFERENT DETAIL INFO, SEPERATE __DETAIL() FUNCTIONS  */
@@ -671,10 +671,10 @@ export function Searcher() {
 
 	return (
 		<div>
-		 <TextField label="Search a song" variant="outlined" onChange={(e) => setSearchName(e.target.value)}></TextField>
+		 <TextField label="Search" variant="outlined" onChange={(e) => setSearchName(e.target.value)}></TextField>
 		 <br></br>
 		 <br></br>
-		 <FormGroup row>
+		 <FormGroup className={styles.row}>
 		   <FormControlLabel control={<Switch checked={filter.track} onChange={checkboxChange} name="track" />} label="Songs" />
 		   <FormControlLabel control={<Switch checked={filter.album} onChange={checkboxChange} name="album" />} label="Albums" />
 		   <FormControlLabel control={<Switch checked={filter.artist} onChange={checkboxChange} name="artist" />} label="Artists" />

@@ -16,7 +16,6 @@ export const featuredSlice = createSlice({
 	reducers: {
 		setFeatPlaylist: (state, action: PayloadAction<string>) => {
 			state.featplaylist = action.payload;
-			console.log(state.featplaylist);
 		},
 	},
 });
@@ -26,8 +25,6 @@ export const { setFeatPlaylist } = featuredSlice.actions;
 export const selectFeatPlaylist = (state: RootState) => state.featured.featplaylist;
 
 export const featPlaylistAsync = (accessToken: string, getURL: string): AppThunk => dispatch => {
-	console.log(accessToken);
-	console.log(getURL);
 	const myHeaders = new Headers();
 	myHeaders.append('Authorization', 'Bearer '+ accessToken);
 
@@ -35,10 +32,8 @@ export const featPlaylistAsync = (accessToken: string, getURL: string): AppThunk
 		method: 'GET',
 		headers: myHeaders,
 	}).then(response => response.json()).then((data) => {
-		console.log(data); 
 		dispatch(setFeatPlaylist(data.playlists ? data.playlists : {})); 
 	}).catch((error) => {
-		console.log(error); 
 		if (error instanceof XMLHttpRequest) { if (error.status === 401) { dispatch(setLoggedIn(false)); } }
 	});
 };

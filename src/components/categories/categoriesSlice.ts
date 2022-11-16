@@ -17,7 +17,6 @@ export const categoriesSlice = createSlice({
 	reducers: {
 		setCategories: (state, action: PayloadAction<string>) => {
 			state.categories = action.payload;
-			console.log(state.categories);
 		},
 	},
 });
@@ -50,7 +49,6 @@ export const setCategoriesAsync = (accessToken: string, id: string = "", url: st
 		/** add returned data to state  */
 		dispatch(setCategories(data.categories ? data.categories : data)); 
 	}).catch((error) => {
-		console.log(error); 
 		/** 401 is bad token, reauthorization needed  */
 		if (error instanceof XMLHttpRequest) { if (error.status === 401) { dispatch(setLoggedIn(false)); } }
 	});

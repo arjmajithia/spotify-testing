@@ -17,7 +17,6 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
 		<nav>
 		<ul>
-			<li><Link to={RouteConstants.LIKED}>Counter</Link></li>
 			<li><Link to={RouteConstants.GENRES}>Categories(Genres)</Link></li>
 			<li><Link to={RouteConstants.SINGLES}>Search</Link></li>
 			<li><Link to={RouteConstants.FEATURED}>Featured</Link></li>
@@ -25,6 +24,8 @@ function App() {
 		</ul>	
 		</nav>	
 		<Homepage />
+     </header>
+		{/* kept counter for testing and diagnostics purposes, no need to show it in Nav area */}
 		<Switch>
 		<Route path={RouteConstants.LIKED}><Counter /></Route>
 		<Route path={RouteConstants.GENRES}><Categories /></Route>
@@ -32,7 +33,6 @@ function App() {
 		<Route path={RouteConstants.FEATURED}><Featured /></Route>
 		<Route path={RouteConstants.NEW}><NewReleases /></Route>
 		</Switch>
-     </header>
     </div>
   );
 }

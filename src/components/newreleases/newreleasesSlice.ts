@@ -34,11 +34,9 @@ export const newReleasesAsync = (accessToken: string, URL: string): AppThunk => 
 		method: 'GET',
 		headers: myHeaders,
 	}).then(response => response.json()).then((data) => {
-		console.log(data); 
 		/** add returned data to state  */
 		dispatch(setNewReleases(data.albums ? data.albums : {})); 
 	}).catch((error) => {
-		console.log(error); 
 		/** 401 is bad token, reauthorization needed  */
 		if (error instanceof XMLHttpRequest) { if (error.status === 401) { dispatch(setLoggedIn(false)); } }
 	});

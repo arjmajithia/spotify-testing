@@ -71,7 +71,6 @@ export const setSearchAsync = (accessToken: string, URL: string): AppThunk => di
 		method: 'GET',
 		headers: myHeaders,
 	}).then(response => response.json()).then((data) => {
-		console.log(data); 
 		/** add returned data to state  */
 		dispatch(setTracks(data.tracks ? data.tracks : {})); 
 		dispatch(setArtists(data.artists ? data.artists : {})); 
@@ -81,7 +80,6 @@ export const setSearchAsync = (accessToken: string, URL: string): AppThunk => di
 		dispatch(setEpisode(data.episodes ? data.episodes : {})); 
 		dispatch(setAudiobook(data.audiobooks ? data.audiobooks : {})); 
 	}).catch((error) => {
-		console.log(error); 
 		/** 401 is bad token, reauthorization needed  */
 		if (error instanceof XMLHttpRequest) { if (error.status === 401) { dispatch(setLoggedIn(false)); } }
 	});
@@ -92,18 +90,15 @@ export const refreshObjectAsync = (accessToken: string, URL: string, objectType:
 	const myHeaders = new Headers();
 	myHeaders.append('Authorization', 'Bearer '+ accessToken);
 
-	console.log(URL);
 	/** type of return */
 	if(objectType === "playlist") { 
 		fetch(URL, {
 			method: 'GET',
 			headers: myHeaders,
 		}).then(response => response.json()).then((data) => {
-			console.log(data); 
 			/** add returned data to state  */
 			dispatch(setPlaylists(data.playlists ? data.playlists : {})); 
 		}).catch((error) => {
-			console.log(error); 
 			/** 401 is bad token, reauthorization needed  */
 				if (error instanceof XMLHttpRequest) { if (error.status === 401) { dispatch(setLoggedIn(false)); } }
 		});
@@ -113,11 +108,9 @@ export const refreshObjectAsync = (accessToken: string, URL: string, objectType:
 			method: 'GET',
 			headers: myHeaders,
 		}).then(response => response.json()).then((data) => {
-			console.log(data); 
 			/** add returned data to state  */
 			dispatch(setAlbums(data.albums ? data.albums : {})); 
 		}).catch((error) => {
-			console.log(error); 
 			/** 401 is bad token, reauthorization needed  */
 				if (error instanceof XMLHttpRequest) { if (error.status === 401) { dispatch(setLoggedIn(false)); } }
 		});
@@ -127,11 +120,9 @@ export const refreshObjectAsync = (accessToken: string, URL: string, objectType:
 			method: 'GET',
 			headers: myHeaders,
 		}).then(response => response.json()).then((data) => {
-			console.log(data); 
 			/** add returned data to state  */
 			dispatch(setTracks(data.tracks ? data.tracks : {})); 
 		}).catch((error) => {
-			console.log(error); 
 			/** 401 is bad token, reauthorization needed  */
 				if (error instanceof XMLHttpRequest) { if (error.status === 401) { dispatch(setLoggedIn(false)); } }
 		});
@@ -141,11 +132,9 @@ export const refreshObjectAsync = (accessToken: string, URL: string, objectType:
 			method: 'GET',
 			headers: myHeaders,
 		}).then(response => response.json()).then((data) => {
-			console.log(data); 
 			/** add returned data to state  */
 			dispatch(setArtists(data.artists ? data.artists : {})); 
 		}).catch((error) => {
-			console.log(error); 
 			/** 401 is bad token, reauthorization needed  */
 				if (error instanceof XMLHttpRequest) { if (error.status === 401) { dispatch(setLoggedIn(false)); } }
 		});
@@ -155,11 +144,9 @@ export const refreshObjectAsync = (accessToken: string, URL: string, objectType:
 			method: 'GET',
 			headers: myHeaders,
 		}).then(response => response.json()).then((data) => {
-			console.log(data); 
 			/** add returned data to state  */
 			dispatch(setEpisode(data.episodes ? data.episodes : {})); 
 		}).catch((error) => {
-			console.log(error); 
 			/** 401 is bad token, reauthorization needed  */
 				if (error instanceof XMLHttpRequest) { if (error.status === 401) { dispatch(setLoggedIn(false)); } }
 		});
@@ -169,11 +156,9 @@ export const refreshObjectAsync = (accessToken: string, URL: string, objectType:
 			method: 'GET',
 			headers: myHeaders,
 		}).then(response => response.json()).then((data) => {
-			console.log(data); 
 			/** add returned data to state  */
 			dispatch(setShow(data.shows ? data.shows : {})); 
 		}).catch((error) => {
-			console.log(error); 
 			/** 401 is bad token, reauthorization needed  */
 				if (error instanceof XMLHttpRequest) { if (error.status === 401) { dispatch(setLoggedIn(false)); } }
 		});
