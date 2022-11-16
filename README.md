@@ -1,6 +1,6 @@
 # Spotify React App
 Built with Typescript, React, React-Router, and Redux\
-MaterialUI for Buttons and formatting\
+MaterialUI for Buttons and formatting
 
 
 ### To-Dos:
@@ -13,4 +13,4 @@ Improve data displaying
 
 ### Learnings:
 Make search functionality more abstract\
-Clear vision of UI and data presentation\
+Clear vision of UI and data presentation
